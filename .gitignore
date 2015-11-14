@@ -1,3 +1,5 @@
 *.o
 *.log
 *.c~
+*.zip
+*.gzip
