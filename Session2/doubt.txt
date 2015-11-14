@@ -1,8 +1,0 @@
-Q4. Input arrays a[10] and b[5]
-	Output : c[15]
-    Description: Array a[10] consists of 10*32*8 bits i.e. 2560 bit, such that these 2560 bits represent a binary number say x.
-		Array b[5] consists of 1280 bits, say y.
-		Consider the bits in y are all 1s.
-		Now on multiplying x with y, x is shifted 1280times to left.
-		So now the result is atleast 2560+1280  bits i.e. 
-		  
