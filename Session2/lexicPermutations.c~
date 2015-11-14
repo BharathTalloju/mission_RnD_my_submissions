@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define NUM 3
+void permutations(int* a,int start);
+void swap(int *a,int i,int j);
+
+int main(){
+	int n,i = NUM-1;
+	int a[NUM];
+
+	scanf("%d",&n);
+	while(n){
+		a[i--] = n%10;
+		n = n/10;
+	}
+
+	permutations(a,0);
+}
+
+void permutations(int *a,int start){
+	int i = start;
+
+
+	if(start == (NUM)){
+		for(i = 0 ; i <NUM ; i++)
+			printf("%d",a[i]);
+		printf("\n");
+		return;
+	}
+	else for(i = start ; i<NUM ; i++){
+			swap(a,i,start);
+			permutations(a,i+1);
+			swap(a,i,start);
+	}
+}
+
+void swap(int *a,int i,int j){
+	int temp = a[i];
+	a[i] = a[j];
+	a[j] = temp;
+
+}

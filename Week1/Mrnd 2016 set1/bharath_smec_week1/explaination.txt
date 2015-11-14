@@ -1,0 +1,41 @@
+Question : Input: Integer array.
+	   Output: a[i] contains product of every element other than a[i] itself.
+
+Soltion: let a[] = {1,2,3,4}
+
+let left_array[i] contain the product of elements to the left of index i.
+
+left_array[] = {1,1,2,6}
+
+similarly, right_array[] = {24,12,4,1}
+
+Now the required array is left_array[] * right_array[].
+{1*24,1*12,2*4,6*1} = {24,12,8,6}
+
+
+Question : given a number, find its rank.
+
+Solution:
+	let the number be 241.
+no. of digits less than 2 to it's right * 2! = 1*2 =    2
+
+no. of digits less than 4 to it's right * 1! = 1*1 = +  1
+
+no. of digits less than 1 to it's right * 0! = 0*1 = +  0
+
+						Rank = 3
+
+Question : Date print.
+
+Solution: Just consider each and every case.
+
+Question : Find x^y%a
+
+Solution : 
+
+Construct an array t[], where t[i] = (x^(2^i))%a
+
+Divide  y into power of 2, for example 6 = 4+2
+				       13 = 8+4+1
+
+Use the formula (X*Y)%A = ((X%A)*(Y%A))%A
