@@ -17,9 +17,6 @@ int delete(VNODE **head_ptr, int id);
 void backup(char *backup_filename, VNODE *head);
 VNODE *merge_records_same_subject();
 void display(VNODE *head);
-void display_db(VNODE *db_head);
-void add_another_column(VNODE *db_head, VNODE *new_list);
-void merge_different_subjects();
 
 void start_process(){
     int flag = 1;
@@ -44,6 +41,7 @@ void start_process(){
                 {
                     printf("\nEnter the subject_id: ");
                     scanf("%d",&sub_id);
+                    head = NULL;
                 }
                 flag = 2;
                 break;
@@ -71,7 +69,7 @@ void start_process(){
              
              case 4:{
                  //Merge records of different subjects
-                 merge_different_subjects();
+                 //merge_different_subjects();
              }
              break;
              
@@ -157,14 +155,11 @@ void start_process(){
                backup(backup_filename, head);
            }
            flag = 1;
-           head = NULL;
            break;
            case 5:
            {//Exit to Main Menu
                flag = 1;
-               head = NULL;
            }
-           break;
        }
     }
     }
@@ -445,133 +440,7 @@ void display(VNODE *head){
     }
 }
 
-void merge_different_subjects(){
-    int flag = 1;
-    int choice;
-    VNODE *db_head = NULL;
-    
-    while(flag == 1){
-        printf("\n\t\t\tDatabase Menu");
-        printf("\n1. Display Database"
-               "\n2. Add another column"
-               "\n3. Perform queries"
-               "\n4. Exit");
-        printf("\nEnter your choice: ");
-        scanf("%d", &choice);
-        
-        switch(choice){
-            case 1:{
-                //Display Database
-                display_db(db_head);
-            }
-            break;
-            
-            case 2:{
-                //Add another column
-                char f_name[40];
-                VNODE *new_list = NULL; 
-                int sub_id;
-                
-                printf("\nEnter the subject id: ");
-                scanf("%d", &sub_id);
-                printf("\nEnter the name of the file : ");
-                scanf("%s", f_name);
-                
-                new_list = restore_backup(f_name, sub_id);
-                if(new_list == NULL){
-                    //Do Nothing
-                }
-                else if(db_head == NULL){
-                    //First list to be added
-                    db_head = new_list;
-                }
-                else{
-                    add_another_column(db_head, new_list);
-                }
-            }
-            break;
-            
-            case 3:{
-                //Perform Queries
-                perform_queries(db_head);
-            }
-            
-            default:{
-                flag = 2;
-            }
-            break;
-        }
-        
-    }
-    
-}
 
-void display_db(VNODE *db_head){
-    VNODE *next_row = NULL;
-    int count = 0;
-    
-    if(db_head == NULL){
-        printf("\n Nothing to display");
-        return;
-    }
-    
-    next_row = db_head;
-    while(next_row){
-        VNODE *horizontal_walker = NULL;
-        
-        if(!count++){
-            //Printing Table headers
-            VNODE *temp = db_head;
-            printf("%5s", "ID");
-            while(temp){
-                printf(" sub%d ", temp-> sub_id);
-                temp = temp-> h_link_right;
-            }
-            printf("\n");
-            continue;
-        }
-        horizontal_walker = next_row;
-        next_row = next_row-> v_link;
-        
-        printf("%5d", horizontal_walker-> id);
-        while(horizontal_walker){
-            printf(" %5d ", horizontal_walker-> marks);
-            horizontal_walker = horizontal_walker-> h_link_right;
-        }
-        printf("\n");
-        
-    }
-    
-}
-
-void add_another_column(VNODE *db_head, VNODE *new_list){
-    VNODE *prev_list = db_head;
-    VNODE *walker1 = NULL;
-    VNODE *walker2 = NULL;
-    
-    //find the last list of the table
-    for(walker2 = db_head ; walker2-> h_link_right ; walker2 = walker2-> h_link_right);
-    
-    walker1 = new_list;
-    for(walker2; walker2 ; walker2 = walker2-> v_link ){
-        while(walker1-> id < walker2-> id){
-            VNODE *temp = walker1;
-            walker1 = walker1-> v_link;
-            free(temp);
-        }
-        if(walker1-> id == walker2-> id){
-            walker2-> h_link_right = walker1;
-            walker1 = walker1-> v_link;
-        }
-    }
-
-}
-
-void perform_queries(VNODE *db_head){
-    int choice = 0;
-    
-    
-}
 
 int main(){
     start_process();
