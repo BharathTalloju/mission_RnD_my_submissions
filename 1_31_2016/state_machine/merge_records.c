@@ -26,10 +26,10 @@ void start_process(){
     int choice ;
     int sub_id = 0;
     VNODE *head = NULL;
-
+    
     printf("\t\t\t\tWelcome\n\n");
     while(flag == 1){
-
+        
         printf("\n\t\t\tMain Menu"
                "\n1. Enter marks for new subject\n"
                "2. Edit previously backed up file\n"
@@ -38,7 +38,7 @@ void start_process(){
                "5. Exit");
                printf("\nEnter your choice: ");
         scanf("%d",&choice);
-        system("clear");
+        
         switch(choice){
             case 1:
                 {
@@ -52,12 +52,12 @@ void start_process(){
                     int write_pos = 6;
                     int temp,r,end_pos;
                     char backup_filename[40];
-
+                    
                     printf("\nEnter the subject_id: ");
                     scanf("%d",&sub_id);
                     printf("\nEnter the name of the file you want to restore from: ");
                     scanf("%s", backup_filename);
-
+                    
                     head = restore_backup(backup_filename, sub_id);
                 }
                 flag = 2;
@@ -68,13 +68,13 @@ void start_process(){
              }
              flag = 2;
              break;
-
+             
              case 4:{
                  //Merge records of different subjects
                  merge_different_subjects();
              }
              break;
-
+             
              case 5:{
                  return;
              }
@@ -82,9 +82,9 @@ void start_process(){
                 printf("\nInvalid Choice");
                 break;
         }
-
+    
     while(flag == 2){
-
+        
         printf("\n1. Display\n"
                "2. Insert\n"
                "3. Delete\n"
@@ -93,7 +93,7 @@ void start_process(){
        printf("\nEnter your choice: ");
        fflush(stdin);
        scanf("%d",&choice);
-
+       
        switch(choice){
            case 1:
                 {//display
@@ -130,7 +130,7 @@ void start_process(){
            {//Delete
                int id;
                int exists = 1;
-
+               
                if(head == NULL){
                    printf("\nERROR: No records exist.");
                }
@@ -145,13 +145,13 @@ void start_process(){
                    printf("\nRecord deleted");
                }
                }
-
-           }
+               
+           } 
            break;
            case 4:
            {//Backup and exit
                char backup_filename[40];
-
+               
                printf("\nEnter the name of the file you want the records to be backed up in: ");
                scanf("%s", backup_filename);
                backup(backup_filename, head);
@@ -172,15 +172,15 @@ void start_process(){
 
 VNODE *restore_backup(char *f_name, int sub_id){
     //Restores data from backup file to a linked list and returns address to the head of the linked list.
-
+    
     VNODE *head = NULL;
     VNODE *writer = NULL;
     VNODE *prev = NULL;
     FILE *f_pointer = NULL;
     int id,marks;
-
+    
     f_pointer = fopen(f_name, "r");
-
+    
     if(!f_pointer){
         printf("\nERROR: file %s cannot be opened\nFile may not exist", f_name);
         exit(0);
@@ -198,7 +198,7 @@ VNODE *restore_backup(char *f_name, int sub_id){
     writer-> v_link = NULL;
     prev = writer;
     head = writer;
-
+    
     while(!(feof(f_pointer))){
     fscanf(f_pointer, "%d %d\n",&id, &marks);
     writer = (VNODE*)malloc(sizeof(VNODE));
@@ -223,7 +223,7 @@ VNODE *insert(VNODE *head, int id, int marks, int sub_id){
     VNODE *new = NULL;
     VNODE *walker = head;
     VNODE *prev = NULL;
-
+    
     if(head-> id > id){
         new = (VNODE*)malloc(sizeof(VNODE));
         new-> h_link_right = NULL;
@@ -263,7 +263,7 @@ VNODE *insert(VNODE *head, int id, int marks, int sub_id){
 int delete(VNODE **head_ptr, int id){
     VNODE *walker = *head_ptr;
     VNODE *prev = NULL;
-
+    
     while(walker){
         if(walker-> id == id){
             if(prev == NULL){
@@ -294,7 +294,7 @@ VNODE *merge_records_same_subject(){
     VNODE *head1 = NULL;
     VNODE *head2 = NULL;
     VNODE *head3 = NULL;
-
+    
     printf("\nEnter the subject_id: ");
     scanf("%d",&sub_id);
     {//creating resultant filename
@@ -309,14 +309,14 @@ VNODE *merge_records_same_subject(){
         resultant_f_name[writing_index++] = 'x';
         resultant_f_name[writing_index++] = 't';
         resultant_f_name[writing_index] = '\0';
-
+        
     }
-
+    
     printf("\nEnter the name of the first file to merge: ");
     scanf("%s",f1_name);
     printf("\nEnter the name of the second file to merge: ");
     scanf("%s",f2_name);
-
+    
     head1 = restore_backup(f1_name, sub_id);
     head2 = restore_backup(f2_name, sub_id);
 
@@ -324,7 +324,7 @@ VNODE *merge_records_same_subject(){
         VNODE *walker1 = head1;
         VNODE *walker2 = head2;
         VNODE *walker3 = NULL;
-
+        
         while(walker1 && walker2){
             if(walker1-> id < walker2-> id){
                 if(head3 == NULL){
@@ -394,7 +394,7 @@ VNODE *merge_records_same_subject(){
                 }
             }
         }
-
+        
         if(walker1){
             walker3-> v_link = walker1;
         }
@@ -404,7 +404,7 @@ VNODE *merge_records_same_subject(){
     }
     printf("\nAfter merging: ");
     display(head3);
-
+    
     printf("\nEnter the name of the file you want the records to be backed up in: ");
     scanf("%s", resultant_f_name);
     backup(resultant_f_name, head3);
@@ -415,7 +415,7 @@ void backup(char *backup_filename, VNODE *head){
     FILE *f_pointer = NULL;
     int id,marks;
     VNODE *reader = head;
-
+    
     f_pointer = fopen(backup_filename, "w");
     if(f_pointer == NULL){
         printf("\nERROR: Cannot create file %s",backup_filename);
@@ -434,7 +434,7 @@ void backup(char *backup_filename, VNODE *head){
 void display(VNODE *head){
     //displays a linked list
     int counter = 1;
-
+    
     if(head == NULL){
         printf("\nNothing to display");
         return;
@@ -449,7 +449,7 @@ void merge_different_subjects(){
     int flag = 1;
     int choice;
     VNODE *db_head = NULL;
-
+    
     while(flag == 1){
         printf("\n\t\t\tDatabase Menu");
         printf("\n1. Display Database"
@@ -458,25 +458,25 @@ void merge_different_subjects(){
                "\n4. Exit");
         printf("\nEnter your choice: ");
         scanf("%d", &choice);
-
+        
         switch(choice){
             case 1:{
                 //Display Database
                 display_db(db_head);
             }
             break;
-
+            
             case 2:{
                 //Add another column
                 char f_name[40];
-                VNODE *new_list = NULL;
+                VNODE *new_list = NULL; 
                 int sub_id;
-
+                
                 printf("\nEnter the subject id: ");
                 scanf("%d", &sub_id);
                 printf("\nEnter the name of the file : ");
                 scanf("%s", f_name);
-
+                
                 new_list = restore_backup(f_name, sub_id);
                 if(new_list == NULL){
                     //Do Nothing
@@ -490,35 +490,35 @@ void merge_different_subjects(){
                 }
             }
             break;
-
+            
             case 3:{
                 //Perform Queries
                 perform_queries(db_head);
             }
-
+            
             default:{
                 flag = 2;
             }
             break;
         }
-
+        
     }
-
+    
 }
 
 void display_db(VNODE *db_head){
     VNODE *next_row = NULL;
     int count = 0;
-
+    
     if(db_head == NULL){
         printf("\n Nothing to display");
         return;
     }
-
+    
     next_row = db_head;
     while(next_row){
         VNODE *horizontal_walker = NULL;
-
+        
         if(!count++){
             //Printing Table headers
             VNODE *temp = db_head;
@@ -532,26 +532,26 @@ void display_db(VNODE *db_head){
         }
         horizontal_walker = next_row;
         next_row = next_row-> v_link;
-
+        
         printf("%5d", horizontal_walker-> id);
         while(horizontal_walker){
             printf(" %5d ", horizontal_walker-> marks);
             horizontal_walker = horizontal_walker-> h_link_right;
         }
         printf("\n");
-
+        
     }
-
+    
 }
 
 void add_another_column(VNODE *db_head, VNODE *new_list){
     VNODE *prev_list = db_head;
     VNODE *walker1 = NULL;
     VNODE *walker2 = NULL;
-
+    
     //find the last list of the table
     for(walker2 = db_head ; walker2-> h_link_right ; walker2 = walker2-> h_link_right);
-
+    
     walker1 = new_list;
     for(walker2; walker2 ; walker2 = walker2-> v_link ){
         while(walker1-> id < walker2-> id){
@@ -569,10 +569,6 @@ void add_another_column(VNODE *db_head, VNODE *new_list){
 
 void perform_queries(VNODE *db_head){
     int choice = 0;
-
-
-}
-
-int main(){
-    start_process();
+    
+    
 }
